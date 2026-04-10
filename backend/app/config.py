@@ -11,7 +11,7 @@ class Settings(BaseSettings):
     database_url: str
     upstash_redis_rest_url: str = ""
     upstash_redis_rest_token: str = ""
-    allowed_origins: str = "http://localhost:3000"
+    allowed_origins: str = "http://localhost:3000, https://agentic-web-researcher.onrender.com"
     max_concurrent_runs: int = 2
 
     # LLM Settings
