@@ -5,6 +5,7 @@ router = APIRouter()
 
 
 @router.get("/ping")
+@router.head("/ping")  # Support HEAD for uptime monitoring
 async def ping():
     return {"status": "ok"}
 

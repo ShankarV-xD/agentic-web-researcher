@@ -40,5 +40,6 @@ app.include_router(research.router, prefix="/api")
 
 
 @app.get("/")
+@app.head("/")  # Support HEAD for uptime monitoring
 async def root():
     return {"message": "Agentic Web Researcher API", "docs": "/docs"}
