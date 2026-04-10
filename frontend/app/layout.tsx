@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Agentic Researcher — AI-powered web research",
+  title: "Agentic Researcher - AI-powered web research",
   description:
-    "Autonomous AI research agent — searches the web, reads sources, and synthesises a cited answer.",
+    "Autonomous AI research agent - searches the web, reads sources, and synthesises a cited answer.",
   keywords: ["AI research", "web search", "autonomous agent", "Perplexity alternative"],
 };
 

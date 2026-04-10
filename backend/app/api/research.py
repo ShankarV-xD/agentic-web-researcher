@@ -18,6 +18,7 @@ class ResearchRequest(BaseModel):
     query: str
     depth: str = "standard"
     user_id: Optional[str] = None
+    custom_api_key: Optional[str] = None
 
 
 class ResearchResponse(BaseModel):
@@ -41,6 +42,7 @@ async def create_research(req: ResearchRequest, db: AsyncSession = Depends(get_d
 @router.get("/research/{session_id}/stream")
 async def stream_research(
     session_id: str,
+    custom_api_key: Optional[str] = Query(None),
     db: AsyncSession = Depends(get_db),
 ):
     session = await crud.get_session(db, session_id)
@@ -67,7 +69,7 @@ async def stream_research(
         # Background task to run the agent and feed the queue
         async def agent_task():
             try:
-                async for event in run_research_agent(query, depth, session_id):
+                async for event in run_research_agent(query, depth, session_id, custom_api_key):
                     await queue.put(event)
             except Exception as e:
                 import traceback

@@ -4,12 +4,13 @@ const BACKEND_URL =
 export async function createResearch(
   query: string,
   depth: string,
-  userId?: string
+  userId?: string,
+  customApiKey?: string
 ): Promise<{ session_id: string }> {
   const res = await fetch(`${BACKEND_URL}/api/research`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ query, depth, user_id: userId }),
+    body: JSON.stringify({ query, depth, user_id: userId, custom_api_key: customApiKey }),
   });
   if (!res.ok) {
     const err = await res.json().catch(() => ({ detail: "Unknown error" }));
@@ -30,6 +31,11 @@ export async function getHistory(userId: string) {
   return res.json();
 }
 
-export function getStreamUrl(sessionId: string): string {
-  return `${BACKEND_URL}/api/research/${sessionId}/stream`;
+export function getStreamUrl(sessionId: string, customApiKey?: string): string {
+  const params = new URLSearchParams();
+  if (customApiKey) {
+    params.append("custom_api_key", customApiKey);
+  }
+  const queryString = params.toString();
+  return `${BACKEND_URL}/api/research/${sessionId}/stream${queryString ? `?${queryString}` : ""}`;
 }

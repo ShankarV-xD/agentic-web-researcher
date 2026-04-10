@@ -8,6 +8,8 @@ import AnswerPanel from "@/components/AnswerPanel";
 import SourcesSidebar from "@/components/SourcesSidebar";
 import type { Source, AgentEvent } from "@/types";
 
+const API_KEY_STORAGE_KEY = "researcher_custom_api_key";
+
 export default function ResearchPage() {
   const params = useParams();
   const sessionId = params?.sessionId as string;
@@ -63,7 +65,9 @@ export default function ResearchPage() {
           setSources(s.sources || []);
           setIterations(s.iterations);
         } else {
-          setStreamUrl(getStreamUrl(sessionId));
+          // Get custom API key from localStorage if exists
+          const customApiKey = localStorage.getItem(API_KEY_STORAGE_KEY);
+          setStreamUrl(getStreamUrl(sessionId, customApiKey || undefined));
         }
       })
       .catch(() => setLoadError("Could not load session."));

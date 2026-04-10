@@ -17,7 +17,7 @@ export default function Home() {
   ];
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-[72vh] gap-10">
+    <div className="flex flex-col items-center justify-center min-h-[72vh] gap-8">
       {/* Hero */}
       <div className="text-center max-w-2xl">
         <div
@@ -39,7 +39,7 @@ export default function Home() {
         </h1>
         <p className="text-base leading-relaxed" style={{ color: "var(--text-secondary)" }}>
           Ask a question. The agent searches the web, reads sources, reasons about what it
-          knows, and writes a structured, cited research brief — automatically.
+          knows, and writes a structured, cited research brief - automatically.
         </p>
       </div>
 

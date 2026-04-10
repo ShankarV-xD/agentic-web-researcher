@@ -4,8 +4,9 @@ import google.generativeai as genai
 from openai import AsyncOpenAI
 from app.config import settings
 
-def configure_genai():
-    genai.configure(api_key=settings.gemini_api_key)
+def configure_genai(custom_api_key: str = None):
+    api_key = custom_api_key if custom_api_key else settings.gemini_api_key
+    genai.configure(api_key=api_key)
 
 openai_client = AsyncOpenAI(
     api_key=settings.groq_api_key if settings.groq_api_key else "dummy",

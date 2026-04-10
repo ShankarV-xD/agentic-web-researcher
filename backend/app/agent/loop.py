@@ -32,12 +32,13 @@ async def run_research_agent(
     query: str,
     depth: str = "standard",
     session_id: str = None,
+    custom_api_key: str = None,
 ) -> AsyncGenerator[dict, None]:
     """
     Core ReAct agent loop. Yields SSE-ready event dicts.
     Each dict has keys: event (str), data (dict)
     """
-    configure_genai()
+    configure_genai(custom_api_key)
     model = genai.GenerativeModel(
         model_name="gemini-3-flash-preview",
         system_instruction=SYSTEM_PROMPT,
