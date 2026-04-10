@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createResearch } from "@/lib/api";
 import { getUserId } from "@/lib/user";
@@ -13,7 +13,8 @@ interface QueryInputProps {
   setExternalDepth?: (d: Depth) => void;
 }
 
-export default function QueryInput({ 
+// Inner component that uses useSearchParams
+function QueryInputInner({ 
   externalQuery, 
   setExternalQuery,
   externalDepth,
@@ -128,5 +129,14 @@ export default function QueryInput({
         Enter to research · Shift+Enter for new line
       </p>
     </div>
+  );
+}
+
+// Wrapper component with Suspense boundary
+export default function QueryInput(props: QueryInputProps) {
+  return (
+    <Suspense fallback={<div className="w-full p-4 text-center" style={{ color: "var(--text-muted)" }}>Loading...</div>}>
+      <QueryInputInner {...props} />
+    </Suspense>
   );
 }

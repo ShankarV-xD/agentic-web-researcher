@@ -1,4 +1,6 @@
 "use client";
+export const dynamic = 'force-dynamic';
+
 import { useState } from "react";
 import QueryInput from "@/components/QueryInput";
 import type { Depth } from "@/types";
