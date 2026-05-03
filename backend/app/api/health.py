@@ -12,6 +12,7 @@ async def ping():
 
 
 @router.get("/health")
+@router.head("/health")
 async def health():
     from app.db.client import AsyncSessionLocal
 
