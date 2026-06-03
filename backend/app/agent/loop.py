@@ -19,10 +19,10 @@ from app.agent.utils import call_llm_with_retry, configure_genai
 DEPTH_ITERATIONS = {"quick": 3, "standard": 5, "deep": 6}
 
 SAFETY_SETTINGS = {
-    HarmCategory.HARM_CATEGORY_HARASSMENT: HarmBlockThreshold.BLOCK_NONE,
-    HarmCategory.HARM_CATEGORY_HATE_SPEECH: HarmBlockThreshold.BLOCK_NONE,
-    HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT: HarmBlockThreshold.BLOCK_NONE,
-    HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT: HarmBlockThreshold.BLOCK_NONE,
+    HarmCategory.HARM_CATEGORY_HARASSMENT: HarmBlockThreshold.BLOCK_ONLY_HIGH,
+    HarmCategory.HARM_CATEGORY_HATE_SPEECH: HarmBlockThreshold.BLOCK_ONLY_HIGH,
+    HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT: HarmBlockThreshold.BLOCK_ONLY_HIGH,
+    HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT: HarmBlockThreshold.BLOCK_ONLY_HIGH,
 }
 
 
@@ -75,9 +75,6 @@ async def run_research_agent(
 
         # Call Gemini or Groq with retry
         try:
-            if iteration > 1:
-                await asyncio.sleep(2)
-                
             if settings.llm_provider == "groq":
                 current_openai_tools = OPENAI_TOOLS
                 if len(sources) < min_sources:
@@ -306,9 +303,6 @@ async def run_research_agent(
 
     # ── Synthesise final answer ───────────────────────────────────────────────
     yield {"event": "synthesising", "data": {"sources_count": len(sources)}}
-
-    # Small delay for free tier RPM limits before final synthesis
-    await asyncio.sleep(2)
 
     evidence_text = (
         "\n\n---\n\n".join(all_raw_observations) if all_raw_observations else "No evidence gathered."
