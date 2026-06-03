@@ -26,12 +26,16 @@ export default function RootLayout({
       <body className="bg-mesh min-h-screen" style={{ backgroundColor: "var(--bg-base)" }}>
         {/* Navigation */}
         <nav
-          className="glass border-b sticky top-0 z-50"
-          style={{ borderColor: "var(--border-subtle)" }}
+          className="sticky top-0 z-50"
+          style={{
+            background: "rgba(10, 10, 18, 0.75)",
+            backdropFilter: "blur(12px)",
+            WebkitBackdropFilter: "blur(12px)",
+            borderBottom: "1px solid var(--border-subtle)",
+          }}
         >
           <div className="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
             <a href="/" className="flex items-center gap-2.5 group">
-              {/* Logo mark */}
               <div
                 className="w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold"
                 style={{
@@ -58,25 +62,13 @@ export default function RootLayout({
                 Beta
               </span>
             </a>
-            <div className="flex items-center gap-4">
-              <a
-                href="/history"
-                className="text-xs font-medium transition-colors hover:text-white"
-                style={{ color: "var(--text-muted)" }}
-              >
-                History
-              </a>
-              <div
-                className="w-px h-4"
-                style={{ background: "var(--border-subtle)" }}
-              />
-              {/* <span
-                className="text-xs"
-                style={{ color: "var(--text-muted)" }}
-              >
-                Powered by Gemini
-              </span> */}
-            </div>
+            <a
+              href="/history"
+              className="text-xs font-medium transition-colors hover:text-white"
+              style={{ color: "var(--text-muted)" }}
+            >
+              History
+            </a>
           </div>
         </nav>
 
