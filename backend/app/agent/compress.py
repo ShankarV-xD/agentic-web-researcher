@@ -20,7 +20,7 @@ async def compress_context(query: str, observations: list[str]) -> str:
             return response.choices[0].message.content.strip()
         else:
             configure_genai()
-            model = genai.GenerativeModel("gemini-3-flash-preview")
+            model = genai.GenerativeModel("gemini-2.0-flash")
             response = await call_llm_with_retry(model, prompt, is_chat=False)
             return response.text.strip()
     except Exception as e:

@@ -72,9 +72,17 @@ async def stream_research(
                 async for event in run_research_agent(query, depth, session_id, custom_api_key):
                     await queue.put(event)
             except Exception as e:
-                import traceback
-                error_detail = f"{str(e)}\n{traceback.format_exc()}"
-                await queue.put({"event": "error", "data": {"message": f"Agent error: {str(e)}", "detail": error_detail}})
+                err_str = str(e).lower()
+                is_quota = any(k in err_str for k in ("429", "quota", "resource_exhausted", "rate limit", "too many requests"))
+                if is_quota:
+                    await queue.put({
+                        "event": "quota_exceeded",
+                        "data": {"message": "Free Gemini quota is exhausted. Add your own free API key to keep going.", "needs_byok": not custom_api_key},
+                    })
+                else:
+                    import traceback
+                    error_detail = f"{str(e)}\n{traceback.format_exc()}"
+                    await queue.put({"event": "error", "data": {"message": f"Agent error: {str(e)}", "detail": error_detail}})
             finally:
                 await queue.put(None) # Sentinel
 

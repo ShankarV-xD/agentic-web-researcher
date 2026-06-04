@@ -40,7 +40,7 @@ async def run_research_agent(
     """
     configure_genai(custom_api_key)
     model = genai.GenerativeModel(
-        model_name="gemini-3-flash-preview",
+        model_name="gemini-2.0-flash",
         system_instruction=SYSTEM_PROMPT,
         tools=TOOL_DECLARATIONS,
         safety_settings=SAFETY_SETTINGS,
@@ -95,7 +95,15 @@ async def run_research_agent(
                     current_message += f"\n\n(System Note: You currently only have {len(sources)}/{min_sources} distinct sources. You MUST continue searching the web and fetching more varied pages. Do not output 'conclude' yet.)"
                 response = await call_llm_with_retry(chat, current_message, is_chat=True)
         except Exception as e:
-            yield {"event": "error", "data": {"message": f"Research failed: {str(e)}"}}
+            err_str = str(e).lower()
+            is_quota = any(k in err_str for k in ("429", "quota", "resource_exhausted", "rate limit", "too many requests"))
+            if is_quota:
+                yield {
+                    "event": "quota_exceeded",
+                    "data": {"message": "Free Gemini quota is exhausted. Add your own free API key to keep going.", "needs_byok": not custom_api_key},
+                }
+            else:
+                yield {"event": "error", "data": {"message": f"Research failed: {str(e)}"}}
             return
 
         tool_name = ""
@@ -326,7 +334,7 @@ async def run_research_agent(
         )
         final_answer = synth_response.choices[0].message.content.strip()
     else:
-        synth_model = genai.GenerativeModel("gemini-3-flash-preview")
+        synth_model = genai.GenerativeModel("gemini-2.0-flash")
         synth_response = await call_llm_with_retry(synth_model, synthesis, is_chat=False)
         final_answer = synth_response.text.strip()
 

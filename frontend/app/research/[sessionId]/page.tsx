@@ -21,6 +21,7 @@ export default function ResearchPage() {
   const [iterations, setIterations] = useState<number>(0);
   const [streamUrl, setStreamUrl] = useState<string | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
+  const [quotaExceeded, setQuotaExceeded] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const onEvent = (event: AgentEvent) => {
@@ -28,6 +29,11 @@ export default function ResearchPage() {
       setAnswer(event.data.answer as string);
       setSources((event.data.sources as Source[]) || []);
       setIterations(event.data.iterations as number);
+    } else if (event.event === "quota_exceeded") {
+      setQuotaExceeded(
+        (event.data.message as string) ||
+          "Free Gemini quota is exhausted. Add your own free API key to continue."
+      );
     }
   };
 
@@ -129,6 +135,45 @@ export default function ResearchPage() {
                   </span>
                 </>
               )}
+            </div>
+          </div>
+        )}
+
+        {/* Quota exhausted banner */}
+        {quotaExceeded && (
+          <div
+            className="mb-4 rounded-xl p-4"
+            style={{
+              background: "rgba(245, 158, 11, 0.08)",
+              border: "1px solid rgba(245, 158, 11, 0.3)",
+            }}
+          >
+            <p className="text-sm mb-3" style={{ color: "#fbbf24" }}>
+              {quotaExceeded}
+            </p>
+            <div className="flex flex-wrap gap-2 text-xs">
+              <a
+                href="https://aistudio.google.com/app/apikey"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-3 py-1.5 rounded-lg font-medium"
+                style={{
+                  background: "rgba(245, 158, 11, 0.18)",
+                  color: "#fbbf24",
+                }}
+              >
+                Get a free Gemini key →
+              </a>
+              <a
+                href="/"
+                className="px-3 py-1.5 rounded-lg"
+                style={{
+                  background: "var(--bg-highlight)",
+                  color: "var(--text-secondary)",
+                }}
+              >
+                Back to home to add it
+              </a>
             </div>
           </div>
         )}

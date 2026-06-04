@@ -28,7 +28,8 @@ export type AgentEventType =
   | "concluding"
   | "synthesising"
   | "done"
-  | "error";
+  | "error"
+  | "quota_exceeded";
 
 export interface AgentEvent {
   event: AgentEventType;

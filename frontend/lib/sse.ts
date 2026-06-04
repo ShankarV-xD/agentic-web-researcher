@@ -31,7 +31,7 @@ export function useSSE({ url, onEvent }: UseSSEOptions) {
         const event: AgentEvent = { event: type, data, timestamp: Date.now() };
         setEvents((prev) => [...prev, event]);
         onEventRef.current?.(event);
-        if (type === "done" || type === "error") {
+        if (type === "done" || type === "error" || type === "quota_exceeded") {
           setDone(true);
           es.close();
           setConnected(false);
@@ -51,6 +51,7 @@ export function useSSE({ url, onEvent }: UseSSEOptions) {
       "synthesising",
       "done",
       "error",
+      "quota_exceeded",
     ];
 
     eventTypes.forEach((type) => {
