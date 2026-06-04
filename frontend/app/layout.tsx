@@ -74,12 +74,17 @@ export default function RootLayout({
 
         <main className="max-w-6xl mx-auto px-4 py-8 lg:overflow-x-hidden">{children}</main>
 
-        {/* Subtle footer */}
-        {/* <footer className="mt-16 pb-8 text-center">
-          <p className="text-xs" style={{ color: "var(--text-muted)" }}>
-            Free-tier · Serper Search · Jina Reader · Gemini 1.5 Flash
-          </p>
-        </footer> */}
+        <footer className="mt-12 pb-8 text-center">
+          <a
+            href="https://shankarv-portfolio.vercel.app"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[11px] transition-colors hover:text-white"
+            style={{ color: "var(--text-muted)" }}
+          >
+            Built by Shankar V
+          </a>
+        </footer>
       </body>
     </html>
   );
