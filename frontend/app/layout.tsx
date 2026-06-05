@@ -72,7 +72,7 @@ export default function RootLayout({
           </div>
         </nav>
 
-        <main className="max-w-6xl mx-auto px-4 py-8 lg:overflow-x-hidden">{children}</main>
+        <main className="max-w-6xl mx-auto px-4 sm:px-5 py-6 sm:py-8 lg:overflow-x-hidden">{children}</main>
 
         <footer className="mt-12 pb-8 text-center">
           <a

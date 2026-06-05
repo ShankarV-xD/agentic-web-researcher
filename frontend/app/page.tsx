@@ -17,11 +17,11 @@ export default function Home() {
   ];
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-[72vh] gap-8">
+    <div className="flex flex-col items-center justify-center min-h-[68vh] sm:min-h-[72vh] gap-6 sm:gap-8">
       {/* Hero */}
       <div className="text-center max-w-2xl">
         <div
-          className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium mb-6"
+          className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] sm:text-xs font-medium mb-5 sm:mb-6"
           style={{
             background: "rgba(139,92,246,0.12)",
             border: "1px solid rgba(139,92,246,0.25)",
@@ -32,12 +32,12 @@ export default function Home() {
           Autonomous research agent
         </div>
 
-        <h1 className="text-4xl font-bold tracking-tight mb-4">
+        <h1 className="text-3xl sm:text-4xl font-bold tracking-tight mb-4">
           <span className="gradient-text">Research anything.</span>
           <br />
           <span style={{ color: "var(--text-primary)" }}>In depth, with citations.</span>
         </h1>
-        <p className="text-base leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+        <p className="text-sm sm:text-base leading-relaxed" style={{ color: "var(--text-secondary)" }}>
           Ask a question. The agent searches the web, reads sources, reasons about what it
           knows, and writes a structured, cited research brief - automatically.
         </p>
@@ -58,7 +58,7 @@ export default function Home() {
         <p className="text-xs text-center mb-3" style={{ color: "var(--text-muted)" }}>
           Try one of these
         </p>
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
           {examples.map((ex) => (
             <button
               key={ex.q}
