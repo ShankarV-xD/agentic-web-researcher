@@ -74,17 +74,15 @@ export default function RootLayout({
 
         <main className="max-w-6xl mx-auto px-4 sm:px-5 py-6 sm:py-8 lg:overflow-x-hidden">{children}</main>
 
-        <footer className="mt-12 pb-8 text-center">
-          <a
-            href="https://shankarv-portfolio.vercel.app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-[11px] transition-colors hover:text-white"
-            style={{ color: "var(--text-muted)" }}
-          >
-            Built by Shankar V
-          </a>
-        </footer>
+        <a
+          href="https://shankarv-portfolio.vercel.app"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="fixed bottom-3 right-4 text-[11px] transition-colors hover:text-white z-40"
+          style={{ color: "var(--text-muted)" }}
+        >
+          Built by Shankar V
+        </a>
       </body>
     </html>
   );
