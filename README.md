@@ -129,7 +129,7 @@ The frontend listens for these named events:
 | Reasoning LLM | Google Gemini 2.0 Flash                                         |
 | Search       | Serper API                                                       |
 | Page reading | Jina Reader (no scraping, no JS rendering required)              |
-| Backend      | FastAPI · SSE-Starlette · SQLAlchemy 2 (async) · asyncpg         |
+| Backend      | FastAPI · SQLAlchemy 2 (async) · asyncpg                         |
 | Database     | Supabase Postgres                                                |
 | Cache        | Upstash Redis (REST) with `dict` fallback                        |
 | Frontend     | Next.js 14 (App Router) · React 18 · TypeScript                  |
