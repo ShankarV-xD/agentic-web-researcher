@@ -41,11 +41,14 @@ function QueryInputInner({
   const [customApiKey, setCustomApiKey] = useState("");
   const [showApiKeyInput, setShowApiKeyInput] = useState(false);
 
-  // Load saved API key from localStorage on mount
+  // Load saved API key from localStorage on mount.
+  // With no server key, a stored key is required — auto-open the modal if missing.
   useEffect(() => {
     const savedKey = localStorage.getItem(API_KEY_STORAGE_KEY);
     if (savedKey) {
       setCustomApiKey(savedKey);
+    } else {
+      setShowApiKeyInput(true);
     }
   }, []);
 
@@ -217,11 +220,10 @@ function QueryInputInner({
               </button>
             </div>
             
-            <p className="text-xs mb-4" style={{ color: "var(--text-secondary)" }}>
-              Enter your own Gemini API key to use instead of the default. 
-              This helps avoid rate limits.
+            <p className="text-xs mb-4 leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+              I&apos;ve had to ask you to bring your own Gemini key. I can&apos;t ship a single shared key because Gemini&apos;s free tier limits how many requests it allows per minute, and one shared key would hit that wall the moment a few people used the app at once. Your key stays in your browser and is only used for your own requests. Grab a free one from Google AI Studio and paste it below.
             </p>
-            
+
             <label className="block text-xs mb-1.5" style={{ color: "var(--text-secondary)" }}>
               API Key
             </label>
@@ -240,15 +242,14 @@ function QueryInputInner({
             />
             
             <p className="mt-3 text-[10px] leading-relaxed" style={{ color: "var(--text-muted)" }}>
-              Your key is stored locally in your browser and only used for Gemini API calls.
-              <a 
-                href="https://aistudio.google.com/app/apikey" 
-                target="_blank" 
+              <a
+                href="https://aistudio.google.com/app/apikey"
+                target="_blank"
                 rel="noopener noreferrer"
-                className="ml-1 underline hover:opacity-80"
+                className="underline hover:opacity-80"
                 style={{ color: "#8b5cf6" }}
               >
-                Get a free key →
+                Get a free key from Google AI Studio →
               </a>
             </p>
             

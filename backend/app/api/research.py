@@ -62,6 +62,17 @@ async def stream_research(
     query = session.query
     depth = session.depth
 
+    # Require the user's own Gemini key — no server fallback key exists.
+    if not custom_api_key:
+        async def needs_key_stream():
+            yield ": keepalive\n\n"
+            payload = json.dumps(
+                {"message": "Add your Gemini key to run research.", "needs_byok": True}
+            )
+            yield f"event: quota_exceeded\ndata: {payload}\n\n"
+
+        return StreamingResponse(needs_key_stream(), media_type="text/event-stream")
+
     async def event_generator():
         await acquire_slot()
         queue = asyncio.Queue()
@@ -74,10 +85,11 @@ async def stream_research(
             except Exception as e:
                 err_str = str(e).lower()
                 is_quota = any(k in err_str for k in ("429", "quota", "resource_exhausted", "rate limit", "too many requests"))
-                if is_quota:
+                is_invalid_key = any(k in err_str for k in ("api key not valid", "api_key_invalid", "permission", "400", "403"))
+                if is_quota or is_invalid_key:
                     await queue.put({
                         "event": "quota_exceeded",
-                        "data": {"message": "Free Gemini quota is exhausted. Add your own free API key to keep going.", "needs_byok": not custom_api_key},
+                        "data": {"message": "Your Gemini key is invalid or out of quota.", "needs_byok": True},
                     })
                 else:
                     import traceback

@@ -151,6 +151,9 @@ export default function ResearchPage() {
             <p className="text-sm mb-3" style={{ color: "#fbbf24" }}>
               {quotaExceeded}
             </p>
+            <p className="text-xs mb-3 leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+              I&apos;ve had to ask you to bring your own Gemini key. I can&apos;t ship a single shared key because Gemini&apos;s free tier limits how many requests it allows per minute, and one shared key would hit that wall the moment a few people used the app at once. Your key stays in your browser and is only used for your own requests. Grab a free one from Google AI Studio and paste it below.
+            </p>
             <div className="flex flex-wrap gap-2 text-xs">
               <a
                 href="https://aistudio.google.com/app/apikey"

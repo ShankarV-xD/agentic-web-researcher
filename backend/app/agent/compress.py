@@ -4,7 +4,7 @@ from app.agent.utils import call_llm_with_retry, configure_genai
 from app.config import settings
 
 
-async def compress_context(query: str, observations: list[str]) -> str:
+async def compress_context(query: str, observations: list[str], custom_api_key: str = None) -> str:
     """Summarise all gathered observations into a compact brief."""
     combined = "\n\n---\n\n".join(observations)
     prompt = compression_prompt(query, combined)
@@ -19,7 +19,7 @@ async def compress_context(query: str, observations: list[str]) -> str:
             )
             return response.choices[0].message.content.strip()
         else:
-            configure_genai()
+            configure_genai(custom_api_key)
             model = genai.GenerativeModel("gemini-2.0-flash")
             response = await call_llm_with_retry(model, prompt, is_chat=False)
             return response.text.strip()

@@ -38,6 +38,13 @@ async def run_research_agent(
     Core ReAct agent loop. Yields SSE-ready event dicts.
     Each dict has keys: event (str), data (dict)
     """
+    if not custom_api_key:
+        yield {
+            "event": "quota_exceeded",
+            "data": {"message": "Add your Gemini key to run research.", "needs_byok": True},
+        }
+        return
+
     configure_genai(custom_api_key)
     model = genai.GenerativeModel(
         model_name="gemini-2.0-flash",
@@ -97,10 +104,11 @@ async def run_research_agent(
         except Exception as e:
             err_str = str(e).lower()
             is_quota = any(k in err_str for k in ("429", "quota", "resource_exhausted", "rate limit", "too many requests"))
-            if is_quota:
+            is_invalid_key = any(k in err_str for k in ("api key not valid", "api_key_invalid", "permission", "400", "403"))
+            if is_quota or is_invalid_key:
                 yield {
                     "event": "quota_exceeded",
-                    "data": {"message": "Free Gemini quota is exhausted. Add your own free API key to keep going.", "needs_byok": not custom_api_key},
+                    "data": {"message": "Your Gemini key is invalid or out of quota.", "needs_byok": True},
                 }
             else:
                 yield {"event": "error", "data": {"message": f"Research failed: {str(e)}"}}
@@ -297,7 +305,7 @@ async def run_research_agent(
                 "event": "compressing",
                 "data": {"reason": "Context getting large, compressing..."},
             }
-            compressed = await compress_context(query, observations)
+            compressed = await compress_context(query, observations, custom_api_key)
             observations = [f"[Compressed research brief]\n{compressed}"]
             if settings.llm_provider == "groq":
                 # We do not compress the strict Groq state array since Groq Llama 3 handles 8K context natively,
@@ -334,6 +342,7 @@ async def run_research_agent(
         )
         final_answer = synth_response.choices[0].message.content.strip()
     else:
+        configure_genai(custom_api_key)
         synth_model = genai.GenerativeModel("gemini-2.0-flash")
         synth_response = await call_llm_with_retry(synth_model, synthesis, is_chat=False)
         final_answer = synth_response.text.strip()
