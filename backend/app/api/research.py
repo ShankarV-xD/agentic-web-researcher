@@ -8,6 +8,7 @@ from pydantic import BaseModel
 
 from app.db.client import get_db
 from app.db import crud
+from app.config import resolve_gemini_key
 from app.agent.loop import run_research_agent
 from app.middleware.rate_limit import acquire_slot, release_slot
 
@@ -62,7 +63,8 @@ async def stream_research(
     query = session.query
     depth = session.depth
 
-    # Require the user's own Gemini key — no server fallback key exists.
+    # User key wins; outside production the server key is a dev fallback.
+    custom_api_key = resolve_gemini_key(custom_api_key)
     if not custom_api_key:
         async def needs_key_stream():
             yield ": keepalive\n\n"

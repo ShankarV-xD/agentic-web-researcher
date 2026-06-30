@@ -4,7 +4,7 @@ from typing import AsyncGenerator
 import google.generativeai as genai
 from google.generativeai.types import HarmCategory, HarmBlockThreshold
 
-from app.config import settings
+from app.config import settings, resolve_gemini_key
 from app.agent.tools import search_web, fetch_page
 from app.agent.compress import compress_context
 from app.agent.prompts import (
@@ -38,6 +38,7 @@ async def run_research_agent(
     Core ReAct agent loop. Yields SSE-ready event dicts.
     Each dict has keys: event (str), data (dict)
     """
+    custom_api_key = resolve_gemini_key(custom_api_key)
     if not custom_api_key:
         yield {
             "event": "quota_exceeded",
@@ -47,7 +48,7 @@ async def run_research_agent(
 
     configure_genai(custom_api_key)
     model = genai.GenerativeModel(
-        model_name="gemini-2.0-flash",
+        model_name="gemini-2.5-flash",
         system_instruction=SYSTEM_PROMPT,
         tools=TOOL_DECLARATIONS,
         safety_settings=SAFETY_SETTINGS,
@@ -343,7 +344,7 @@ async def run_research_agent(
         final_answer = synth_response.choices[0].message.content.strip()
     else:
         configure_genai(custom_api_key)
-        synth_model = genai.GenerativeModel("gemini-2.0-flash")
+        synth_model = genai.GenerativeModel("gemini-2.5-flash")
         synth_response = await call_llm_with_retry(synth_model, synthesis, is_chat=False)
         final_answer = synth_response.text.strip()
 

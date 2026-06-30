@@ -45,9 +45,10 @@ function QueryInputInner({
   // With no server key, a stored key is required — auto-open the modal if missing.
   useEffect(() => {
     const savedKey = localStorage.getItem(API_KEY_STORAGE_KEY);
+    const isLocal = /^(localhost|127\.0\.0\.1)$/.test(window.location.hostname);
     if (savedKey) {
       setCustomApiKey(savedKey);
-    } else {
+    } else if (!isLocal) {
       setShowApiKeyInput(true);
     }
   }, []);
